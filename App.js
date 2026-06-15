@@ -4,19 +4,35 @@ import { Pressable, Text } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 
 import WelcomeScreen from './screens/WelcomeScreen';
-import ProfileScreen from './screens/ProfileScreen';
 import HomeScreen from './screens/HomeScreen';
+import AddScreen from './screens/AddScreen';
+import ProfileScreen from './screens/ProfileScreen';
 
 import { COLORS } from './constants/colors';
+import { FAKE_EXPENSES } from './constants/expenses';
 
 export default function App() {
   const [currentScreen, setCurrentScreen] =
     useState('welcome');
 
-  // Temporary nav link — Day 6 replaces all of this with real tabs
+  // Day 5: expenses state lives here
+  const [expenses, setExpenses] =
+    useState(FAKE_EXPENSES);
+
+  // Add new expense
+  const addExpense = (expense) => {
+    setExpenses((prev) => [
+      expense,
+      ...prev,
+    ]);
+  };
+
+  // Temporary nav link
   const NavLink = ({ to, label }) => (
     <Pressable
-      onPress={() => setCurrentScreen(to)}
+      onPress={() =>
+        setCurrentScreen(to)
+      }
       style={{
         padding: 16,
         alignItems: 'center',
@@ -35,7 +51,7 @@ export default function App() {
 
   return (
     <>
-      <StatusBar style='light' />
+      <StatusBar style="light" />
 
       {currentScreen === 'welcome' && (
         <WelcomeScreen
@@ -47,10 +63,32 @@ export default function App() {
 
       {currentScreen === 'home' && (
         <>
-          <HomeScreen />
+          <HomeScreen expenses={expenses} />
+
           <NavLink
-            to='profile'
-            label='Go to Profile →'
+            to="add"
+            label="+ Add Expense"
+          />
+
+          <NavLink
+            to="profile"
+            label="Profile →"
+          />
+        </>
+      )}
+
+      {currentScreen === 'add' && (
+        <>
+          <AddScreen
+            onAdd={(e) => {
+              addExpense(e);
+              setCurrentScreen('home');
+            }}
+          />
+
+          <NavLink
+            to="home"
+            label="← Cancel"
           />
         </>
       )}
@@ -58,9 +96,10 @@ export default function App() {
       {currentScreen === 'profile' && (
         <>
           <ProfileScreen />
+
           <NavLink
-            to='home'
-            label='← Back to Expenses'
+            to="home"
+            label="← Back to Expenses"
           />
         </>
       )}

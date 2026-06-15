@@ -1,20 +1,16 @@
+// screens/HomeScreen.js
 
-import { useState } from 'react';
 import { FlatList, StyleSheet, Text, View } from 'react-native';
 import { COLORS, FONT, SPACING } from '../constants/colors';
-import { FAKE_EXPENSES } from '../constants/expenses';
 import ExpenseCard from '../components/ExpenseCard';
 
 const formatINR = (n) =>
-  'Rs. ' + Number(n).toLocaleString('en-IN', {
+  'Rs. ' +
+  Number(n).toLocaleString('en-IN', {
     maximumFractionDigits: 0,
   });
 
-export default function HomeScreen() {
-  // State, not a plain import — Day 5's form will add to this array
-  const [expenses, setExpenses] = useState(FAKE_EXPENSES);
-
-  // Derived value — recomputed automatically on every render
+export default function HomeScreen({ expenses }) {
   const total = expenses.reduce(
     (sum, e) => sum + e.amount,
     0
@@ -47,7 +43,9 @@ export default function HomeScreen() {
         }
         ListEmptyComponent={
           <View style={styles.empty}>
-            <Text style={styles.emptyEmoji}>📭</Text>
+            <Text style={styles.emptyEmoji}>
+              📭
+            </Text>
 
             <Text style={styles.emptyText}>
               No expenses yet — tap + to add one
@@ -58,8 +56,6 @@ export default function HomeScreen() {
     </View>
   );
 }
-
-// screens/HomeScreen.js — Part 2: StyleSheet
 
 const styles = StyleSheet.create({
   screen: {
