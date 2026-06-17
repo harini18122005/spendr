@@ -1,3 +1,5 @@
+// screens/AddScreen.js
+
 import { useState } from "react";
 import {
   KeyboardAvoidingView,
@@ -17,7 +19,6 @@ import {
   SPACING,
 } from "../constants/colors";
 
-import { VIBES } from "../constants/vibes";
 import VibePicker from "../components/VibePicker";
 
 const CATEGORIES = [
@@ -27,23 +28,20 @@ const CATEGORIES = [
   { key: "other", label: "📦 Other" },
 ];
 
-export default function AddScreen({ onAdd }) {
-  // ■■ Form state ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
-
+export default function AddScreen({
+  onAdd,
+  navigation,
+}) {
   const [amount, setAmount] = useState("");
   const [category, setCategory] = useState("food");
   const [vibe, setVibe] = useState(null);
   const [note, setNote] = useState("");
-
-  // ■■ Error state ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
 
   const [amountError, setAmountError] =
     useState("");
 
   const [vibeError, setVibeError] =
     useState("");
-
-  // ■■ Validation ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
 
   const validate = () => {
     let valid = true;
@@ -73,8 +71,6 @@ export default function AddScreen({ onAdd }) {
     return valid;
   };
 
-  // ■■ Reset form ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
-
   const resetForm = () => {
     setAmount("");
     setCategory("food");
@@ -84,8 +80,6 @@ export default function AddScreen({ onAdd }) {
     setAmountError("");
     setVibeError("");
   };
-
-  // ■■ Submit ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
 
   const handleSubmit = () => {
     if (!validate()) return;
@@ -102,6 +96,10 @@ export default function AddScreen({ onAdd }) {
     onAdd(newExpense);
 
     resetForm();
+
+    if (navigation) {
+      navigation.goBack();
+    }
   };
 
   return (
@@ -120,7 +118,6 @@ export default function AddScreen({ onAdd }) {
         <Text style={styles.title}>
           Add Expense
         </Text>
-        {/* ■■ AMOUNT FIELD ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ */}
 
         <Text style={styles.label}>
           Amount (Rs.)
@@ -155,7 +152,6 @@ export default function AddScreen({ onAdd }) {
             {amountError}
           </Text>
         ) : null}
-        {/* ■■ CATEGORY PICKER ■■■■■■■■■■■■■■■■■■■■■■■ */}
 
         <Text style={styles.label}>
           Category
@@ -191,7 +187,6 @@ export default function AddScreen({ onAdd }) {
             );
           })}
         </View>
-        {/* ■■ VIBE PICKER ■■■■■■■■■■■■■■■■■■■■■■■■■■■ */}
 
         <Text style={styles.label}>
           Vibe
@@ -207,7 +202,6 @@ export default function AddScreen({ onAdd }) {
             {vibeError}
           </Text>
         ) : null}
-        {/* ■■ NOTE FIELD ■■■■■■■■■■■■■■■■■■■■■■■■■■■ */}
 
         <Text style={styles.label}>
           Note{" "}
@@ -236,7 +230,6 @@ export default function AddScreen({ onAdd }) {
         <Text style={styles.charCount}>
           {note.length}/100
         </Text>
-        {/* ■■ SUBMIT BUTTON ■■■■■■■■■■■■■■■■■■■■■■■ */}
 
         <Pressable
           style={({ pressed }) => [
@@ -254,6 +247,7 @@ export default function AddScreen({ onAdd }) {
     </KeyboardAvoidingView>
   );
 }
+
 const styles = StyleSheet.create({
   screen: {
     flex: 1,

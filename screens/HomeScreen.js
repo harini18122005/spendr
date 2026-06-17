@@ -1,7 +1,18 @@
 // screens/HomeScreen.js
 
-import { FlatList, StyleSheet, Text, View } from 'react-native';
-import { COLORS, FONT, SPACING } from '../constants/colors';
+import {
+  FlatList,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
+
+import {
+  COLORS,
+  FONT,
+  SPACING,
+} from '../constants/colors';
+
 import ExpenseCard from '../components/ExpenseCard';
 
 const formatINR = (n) =>
@@ -10,7 +21,10 @@ const formatINR = (n) =>
     maximumFractionDigits: 0,
   });
 
-export default function HomeScreen({ expenses }) {
+export default function HomeScreen({
+  expenses,
+  navigation,
+}) {
   const total = expenses.reduce(
     (sum, e) => sum + e.amount,
     0
@@ -22,7 +36,14 @@ export default function HomeScreen({ expenses }) {
         data={expenses}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
-          <ExpenseCard expense={item} />
+          <ExpenseCard
+            expense={item}
+            onPress={() =>
+              navigation.navigate('Detail', {
+                expense: item,
+              })
+            }
+          />
         )}
         contentContainerStyle={styles.listContent}
         showsVerticalScrollIndicator={false}

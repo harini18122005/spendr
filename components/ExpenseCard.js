@@ -1,16 +1,15 @@
+// components/ExpenseCard.js
 
-import { useState } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { COLORS, FONT, RADIUS, SPACING } from '../constants/colors';
 import { getVibe } from '../constants/vibes';
 
-// Helper — formats a number as Indian Rupees (same as BudgetCard)
 const formatINR = (n) =>
-  'Rs. ' + Number(n).toLocaleString('en-IN', {
+  'Rs. ' +
+  Number(n).toLocaleString('en-IN', {
     maximumFractionDigits: 0,
   });
 
-// Helper — turns a timestamp into a friendly relative label
 const timeAgo = (timestamp) => {
   const hours = Math.floor(
     (Date.now() - timestamp) / (1000 * 60 * 60)
@@ -20,38 +19,42 @@ const timeAgo = (timestamp) => {
   if (hours < 24) return `${hours}h ago`;
 
   const days = Math.floor(hours / 24);
-  return days === 1 ? 'Yesterday' : `${days} days ago`;
+  return days === 1
+    ? 'Yesterday'
+    : `${days} days ago`;
 };
 
-export default function ExpenseCard({ expense }) {
-  const [expanded, setExpanded] = useState(false);
-
+export default function ExpenseCard({
+  expense,
+  onPress,
+}) {
   const vibe = getVibe(expense.vibe);
 
   return (
     <Pressable
-      onPress={() => setExpanded(!expanded)}
+      onPress={onPress}
       style={({ pressed }) => [
         styles.card,
-        { borderLeftColor: vibe.color }, // vibe colour strip
+        { borderLeftColor: vibe.color },
         pressed && styles.cardPressed,
       ]}
     >
-      {/* Top row: emoji + note + amount */}
-
       <View style={styles.topRow}>
-        <Text style={styles.emoji}>{vibe.emoji}</Text>
+        <Text style={styles.emoji}>
+          {vibe.emoji}
+        </Text>
 
         <View style={styles.middle}>
           <Text
             style={styles.note}
-            numberOfLines={expanded ? 0 : 1}
+            numberOfLines={1}
           >
             {expense.note}
           </Text>
 
           <Text style={styles.meta}>
-            {expense.category} · {timeAgo(expense.date)}
+            {expense.category} ·{' '}
+            {timeAgo(expense.date)}
           </Text>
         </View>
 
@@ -59,39 +62,9 @@ export default function ExpenseCard({ expense }) {
           {formatINR(expense.amount)}
         </Text>
       </View>
-
-      {/* Expanded details — render only when tapped */}
-
-      {expanded && (
-        <View style={styles.details}>
-          <View
-            style={[
-              styles.vibeBadge,
-              {
-                backgroundColor: vibe.color + '22',
-              },
-            ]}
-          >
-            <Text
-              style={[
-                styles.vibeBadgeText,
-                { color: vibe.color },
-              ]}
-            >
-              {vibe.emoji} {vibe.label} — {vibe.description}
-            </Text>
-          </View>
-
-          <Text style={styles.detailHint}>
-            Tap again to collapse
-          </Text>
-        </View>
-      )}
     </Pressable>
   );
 }
-
-// components/ExpenseCard.js — Part 2: StyleSheet
 
 const styles = StyleSheet.create({
   card: {
@@ -99,16 +72,17 @@ const styles = StyleSheet.create({
     borderRadius: RADIUS.lg,
     padding: SPACING.lg,
     marginBottom: SPACING.md,
-    borderLeftWidth: 4, // the vibe colour strip lives here
+    borderLeftWidth: 4,
   },
 
   cardPressed: {
-    backgroundColor: COLORS.surfaceElevated,
+    backgroundColor:
+      COLORS.surfaceElevated,
     transform: [{ scale: 0.99 }],
   },
 
   topRow: {
-    flexDirection: 'row', // emoji | text | amount
+    flexDirection: 'row',
     alignItems: 'center',
     gap: SPACING.md,
   },
@@ -138,30 +112,5 @@ const styles = StyleSheet.create({
     color: COLORS.text,
     fontSize: FONT.lg,
     fontWeight: '800',
-  },
-
-  details: {
-    marginTop: SPACING.md,
-    paddingTop: SPACING.md,
-    borderTopWidth: 1,
-    borderTopColor: COLORS.border,
-  },
-
-  vibeBadge: {
-    borderRadius: RADIUS.md,
-    paddingHorizontal: SPACING.md,
-    paddingVertical: SPACING.sm,
-    alignSelf: 'flex-start',
-  },
-
-  vibeBadgeText: {
-    fontSize: FONT.sm,
-    fontWeight: '700',
-  },
-
-  detailHint: {
-    color: COLORS.textDim,
-    fontSize: FONT.xs,
-    marginTop: SPACING.sm,
   },
 });

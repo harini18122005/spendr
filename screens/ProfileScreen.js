@@ -1,3 +1,5 @@
+// screens/ProfileScreen.js
+
 import { useEffect, useState } from "react";
 import {
   ScrollView,
@@ -95,6 +97,7 @@ export default function ProfileScreen() {
 
     return "The Cautious Saver";
   };
+
   return (
     <KeyboardAvoidingView
       style={{ flex: 1 }}
@@ -200,6 +203,7 @@ export default function ProfileScreen() {
               }
               keyboardType="numeric"
             />
+
             {budgetErr ? (
               <Text style={styles.errText}>
                 {budgetErr}
