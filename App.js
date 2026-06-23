@@ -8,6 +8,7 @@ import WelcomeScreen from './screens/WelcomeScreen';
 import BottomTabs from './navigation/BottomTabs';
 
 import { FAKE_EXPENSES } from './constants/expenses';
+import { CategoryFilterProvider } from './context/CategoryFilterContext';
 
 export default function App() {
   const [showWelcome, setShowWelcome] =
@@ -41,12 +42,14 @@ export default function App() {
     <>
       <StatusBar style="light" />
 
-      <NavigationContainer>
-        <BottomTabs
-          expenses={expenses}
-          addExpense={addExpense}
-        />
-      </NavigationContainer>
+      <CategoryFilterProvider>
+        <NavigationContainer>
+          <BottomTabs
+            expenses={expenses}
+            addExpense={addExpense}
+          />
+        </NavigationContainer>
+      </CategoryFilterProvider>
     </>
   );
 }
